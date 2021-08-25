@@ -1,24 +1,22 @@
 package io.github.thebusybiscuit.cscorelib2.protection.modules;
 
+import com.plotsquared.core.location.Location;
+import com.plotsquared.core.permissions.Permission;
+import com.plotsquared.core.player.PlotPlayer;
+import com.plotsquared.core.plot.Plot;
+import com.plotsquared.core.util.Permissions;
+import io.github.thebusybiscuit.cscorelib2.protection.ProtectableAction;
+import io.github.thebusybiscuit.cscorelib2.protection.ProtectionModule;
+import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
 
-import com.plotsquared.core.configuration.Captions;
-import com.plotsquared.core.location.Location;
-import com.plotsquared.core.player.PlotPlayer;
-import com.plotsquared.core.plot.Plot;
-import com.plotsquared.core.util.Permissions;
-
-import io.github.thebusybiscuit.cscorelib2.protection.ProtectableAction;
-import io.github.thebusybiscuit.cscorelib2.protection.ProtectionModule;
-import lombok.NonNull;
-
-public class PlotSquared5ProtectionModule implements ProtectionModule {
+public class PlotSquared6ProtectionModule implements ProtectionModule {
 
     private final Plugin plugin;
 
-    public PlotSquared5ProtectionModule(@NonNull Plugin plugin) {
+    public PlotSquared6ProtectionModule(@NonNull Plugin plugin) {
         this.plugin = plugin;
     }
 
@@ -36,7 +34,7 @@ public class PlotSquared5ProtectionModule implements ProtectionModule {
     public boolean hasPermission(OfflinePlayer p, org.bukkit.Location l, ProtectableAction action) {
         Block b = l.getBlock();
 
-        Location location = new Location(b.getWorld().getName(), b.getX(), b.getY(), b.getZ());
+        Location location = Location.at(b.getWorld().getName(), b.getX(), b.getY(), b.getZ());
 
         if (location.isPlotRoad()) {
             return check(p, action);
@@ -47,17 +45,15 @@ public class PlotSquared5ProtectionModule implements ProtectionModule {
     }
 
     private boolean check(OfflinePlayer p, ProtectableAction action) {
+        PlotPlayer<OfflinePlayer> player = PlotPlayer.from(p);
         switch (action) {
             case INTERACT_BLOCK:
-                return Permissions.hasPermission(PlotPlayer.wrap(p), Captions.PERMISSION_ADMIN_INTERACT_UNOWNED);
-            case INTERACT_ENTITY:
-            case ATTACK_ENTITY:
-                return Permissions.hasPermission(PlotPlayer.wrap(p), Captions.FLAG_ANIMAL_INTERACT);
+                return Permissions.hasPermission(player, Permission.PERMISSION_ADMIN_INTERACT_UNOWNED);
             case ATTACK_PLAYER:
-                return Permissions.hasPermission(PlotPlayer.wrap(p), Captions.FLAG_PVP);
+                return Permissions.hasPermission(player, Permission.PERMISSION_ADMIN_PVP);
             case PLACE_BLOCK:
             default:
-                return Permissions.hasPermission(PlotPlayer.wrap(p), Captions.PERMISSION_ADMIN_BUILD_UNOWNED);
+                return Permissions.hasPermission(player, Permission.PERMISSION_ADMIN_BUILD_UNOWNED);
         }
     }
 }

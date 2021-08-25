@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import io.github.thebusybiscuit.cscorelib2.protection.modules.*;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
@@ -15,21 +16,6 @@ import org.bukkit.plugin.Plugin;
 
 import io.github.thebusybiscuit.cscorelib2.protection.loggers.CoreProtectLogger;
 import io.github.thebusybiscuit.cscorelib2.protection.loggers.LogBlockLogger;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.BentoBoxProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.BlockLockerProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.ChestProtectProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.FactionsUUIDProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.FunnyGuildsProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.GriefPreventionProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.LWCProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.LandsProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.LocketteProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.PlotSquared4ProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.PlotSquared5ProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.PreciousStonesProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.RedProtectProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.TownyProtectionModule;
-import io.github.thebusybiscuit.cscorelib2.protection.modules.WorldGuardProtectionModule;
 import lombok.NonNull;
 
 /**
@@ -78,8 +64,11 @@ public final class ProtectionManager {
 
             if (plotSquared.getDescription().getVersion().startsWith("4.")) {
                 registerModule(plotSquared, plugin -> new PlotSquared4ProtectionModule(plugin));
+            }
+            else if (plotSquared.getDescription().getVersion().startsWith("5.")) {
+                logger.log(Level.WARNING, "PlotSquared v5 is NOT supported. Only v4 or v6 is supported.");
             } else {
-                registerModule(plotSquared, plugin -> new PlotSquared5ProtectionModule(plugin));
+                registerModule(plotSquared, plugin -> new PlotSquared6ProtectionModule(plugin));
             }
         }
 
